@@ -18,26 +18,36 @@ public class NewsAdapter extends ArrayAdapter<News> {
         super(context, 0, newsList);
     }
 
+    static class ViewHolderItem {
+        TextView textViewItemTitle;
+        TextView textViewItemSection;
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        ViewHolderItem viewHolder;
+
         View listItemView = convertView;
 
-        if(listItemView == null) {
+        if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+            viewHolder = new ViewHolderItem();
+            viewHolder.textViewItemTitle = (TextView) listItemView.findViewById(R.id.title);
+            viewHolder.textViewItemSection = (TextView) listItemView.findViewById(R.id.section);
+            listItemView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolderItem) listItemView.getTag();
         }
 
         News currentNews = getItem(position);
 
-        TextView titleTextView = (TextView) listItemView.findViewById(R.id.title);
-        TextView sectionTextView = (TextView) listItemView.findViewById(R.id.section);
-
         String title = currentNews.getTitle();
         String section = currentNews.getSection();
 
-        titleTextView.setText(title);
-        sectionTextView.setText(section);
+        viewHolder.textViewItemTitle.setText(title);
+        viewHolder.textViewItemSection.setText(section);
 
         return listItemView;
     }

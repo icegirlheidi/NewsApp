@@ -1,8 +1,5 @@
 package com.example.android.newsapp;
 
-/**
- * Created by icegirlheidi on 17/5/30.
- */
 
 public class News {
 

@@ -7,11 +7,10 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/section"
+        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="sport"
-        android:textAllCaps="true"/>
+        tools:text="2017-04-05T09:00:16Z"/>
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -19,4 +18,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black"
         tools:text="'I'm not well enough': Warriors coach Steve Kerr set to miss start of NBA finals"/>
+    <TextView
+        android:id="@+id/section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="sport"
+        android:textAllCaps="true"/>
+
 </LinearLayout>

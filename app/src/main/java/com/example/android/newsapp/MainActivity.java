@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +26,10 @@ import static com.example.android.newsapp.R.id.recycler_view;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
 
+    private static final String LOG_TAG = MainActivity.class.getName();
     private NewsAdapter mAdapter;
     private static final int LOADER_ID = 1;
-    private static final String REQUEST_URL = "http://content.guardianapis.com/search?section=sport&q=Steph%20AND%20Curry&api-key=test";
+    private static final String REQUEST_URL = "http://content.guardianapis.com/search?q=Steph%20AND%20Curry&api-key=test";
     private RecyclerView mRecyclerView;
     private TextView mEmptyTextView;
 
@@ -38,16 +40,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mRecyclerView = (RecyclerView) findViewById(recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mEmptyTextView = (TextView)findViewById(R.id.empty_text_view);
+        mEmptyTextView = (TextView) findViewById(R.id.empty_text_view);
 
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
         mRecyclerView.setAdapter(mAdapter);
 
-        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        if(networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            getLoaderManager().initLoader(LOADER_ID, null,this);
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            getLoaderManager().initLoader(LOADER_ID, null, this);
         } else {
             View loadingProgress = findViewById(R.id.loading_progress);
             loadingProgress.setVisibility(View.GONE);
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if(itemId == R.id.action_settings) {
+        if (itemId == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
             return true;
@@ -80,9 +82,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 getString(R.string.settings_order_by_key),
                 getString(R.string.settings_order_by_default)
         );
+        String pageSize = sharedPreferences.getString(
+                getString(R.string.settings_page_size_key),
+                getString(R.string.settings_page_size_default)
+        );
         Uri baseUri = Uri.parse(REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter("section", "sport");
         uriBuilder.appendQueryParameter("order-by", orderBy);
+        uriBuilder.appendQueryParameter("page-size", pageSize);
+        Log.e(LOG_TAG, uriBuilder.toString());
         return new NewsLoader(this, uriBuilder.toString());
     }
 
@@ -90,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<News>> loader, List<News> newsItems) {
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
 
-        if(newsItems != null && !newsItems.isEmpty()) {
+        if (newsItems != null && !newsItems.isEmpty()) {
             mAdapter = new NewsAdapter(this, newsItems);
             mRecyclerView.setAdapter(mAdapter);
         } else {

@@ -25,7 +25,9 @@ public class SettingsActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.main);
 
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            Preference pageSize = findPreference(getString(R.string.settings_page_size_key));
             bindPreferenceSummaryToValue(orderBy);
+            bindPreferenceSummaryToValue(pageSize);
         }
 
         @Override

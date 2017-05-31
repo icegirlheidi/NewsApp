@@ -2,53 +2,73 @@ package com.example.android.newsapp;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
 
-public class NewsAdapter extends ArrayAdapter<News> {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+
+    public List<News> mNewsList;
+    private Context mContext;
 
 
-    public NewsAdapter(Context context, List<News> newsList) {
-        super(context, 0, newsList);
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView titleTextView;
+        public TextView sectionTextView;
 
-    static class ViewHolderItem {
-        TextView textViewItemTitle;
-        TextView textViewItemSection;
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolderItem viewHolder;
-
-        View listItemView = convertView;
-
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-            viewHolder = new ViewHolderItem();
-            viewHolder.textViewItemTitle = (TextView) listItemView.findViewById(R.id.title);
-            viewHolder.textViewItemSection = (TextView) listItemView.findViewById(R.id.section);
-            listItemView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolderItem) listItemView.getTag();
+        public ViewHolder(View itemView) {
+            super(itemView);
+            titleTextView = (TextView) itemView.findViewById(R.id.title);
+            sectionTextView = (TextView) itemView.findViewById(R.id.section);
         }
-
-        News currentNews = getItem(position);
-
-        String title = currentNews.getTitle();
-        String section = currentNews.getSection();
-
-        viewHolder.textViewItemTitle.setText(title);
-        viewHolder.textViewItemSection.setText(section);
-
-        return listItemView;
     }
+
+    public NewsAdapter (Context context, List<News> newsList) {
+        this.mContext = context;
+        this.mNewsList = newsList;
+    }
+
+    private Context getContext() {
+        return mContext;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View newsView = inflater.inflate(R.layout.list_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(newsView);
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(NewsAdapter.ViewHolder viewHolder, int position) {
+        News news = mNewsList.get(position);
+        TextView titleTextView = viewHolder.titleTextView;
+        titleTextView.setText(news.getTitle());
+        TextView sectionTextView = viewHolder.sectionTextView;
+        sectionTextView.setText(news.getSection());
+    }
+
+    @Override
+    public int getItemCount() {
+        return mNewsList.size();
+    }
+
+    public void updateItems(List<News> myNews) {
+        this.mNewsList = myNews;
+        notifyDataSetChanged();
+    }
+    /*public void clear() {
+        int size = mNewsList.size();
+        mNewsList.clear();
+        notifyItemRangeRemoved(0, size);
+    }*/
+
+
 }

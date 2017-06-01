@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private static final String LOG_TAG = NewsAdapter.class.getName();
     public List<News> mNewsList;
     private Context mContext;
-    private static final String DATE_SEPORATOR = "T";
+
+    // The webPublicationDate from json file is like "2017-04-25T14:28:04Z"
+    // so "T" separates date and time
+    private static final String DATE_SEPARATOR = "T";
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,9 +59,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public void onBindViewHolder(NewsAdapter.ViewHolder viewHolder, int position) {
         final News news = mNewsList.get(position);
 
-        TextView titleTextView = viewHolder.titleTextView;
+        final TextView titleTextView = viewHolder.titleTextView;
         titleTextView.setText(news.getTitle());
 
+        // Show details of news when news title is clicked
         titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,12 +76,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         sectionTextView.setText(news.getSection());
 
         TextView dateTextView = viewHolder.dateTextView;
-        String[] dateParts = news.getDate().split(DATE_SEPORATOR);
+        String[] dateParts = news.getDate().split(DATE_SEPARATOR);
         String date = dateParts[0];
         String time = dateParts[1];
-        dateTextView.setText(date);
 
-        Log.e(LOG_TAG, news.getUrl());
+        // Show only date (i.e. "2017-04-25")
+        dateTextView.setText(date);
     }
 
     @Override

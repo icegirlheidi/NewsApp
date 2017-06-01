@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/newsSection"
-        tools:text="2017-04-05T09:00:16Z"/>
+        tools:text="2017-04-05"/>
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"

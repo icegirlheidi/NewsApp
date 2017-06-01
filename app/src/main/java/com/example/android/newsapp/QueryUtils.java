@@ -62,6 +62,8 @@ public final class QueryUtils {
 
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
+
+        // If the URL is null, then return early.
         if (url == null) {
             return jsonResponse;
         }
@@ -74,6 +76,8 @@ public final class QueryUtils {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
+            // If the request was successful (response code 200),
+            // then read the input stream and parse the response.
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
@@ -93,6 +97,10 @@ public final class QueryUtils {
         return jsonResponse;
     }
 
+    /**
+     * Convert the {@link InputStream} into a String which contains the
+     * whole JSON response from the server.
+     */
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
@@ -107,7 +115,10 @@ public final class QueryUtils {
         return output.toString();
     }
 
-
+    /**
+     * Return an {@link News} object by parsing out information
+     * about the News from the input newsJSON string.
+     */
     private static List<News> extractFeatureFromJSON(String newsJSON) {
         List<News> newsList = new ArrayList<>();
         try {

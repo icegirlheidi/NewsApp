@@ -45,12 +45,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
         mRecyclerView.setAdapter(mAdapter);
 
+//      //Use the ConnectivityManager to query the active network
+        // and determine if it has Internet connectivity.
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            // Initialize the loader if there is internet connection
             getLoaderManager().initLoader(LOADER_ID, null, this);
         } else {
+            // When there is no internet connection,
+            // Remove the loading progress bar and display no internet connection
             View loadingProgress = findViewById(R.id.loading_progress);
             loadingProgress.setVisibility(View.GONE);
             mEmptyTextView.setVisibility(View.VISIBLE);
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_settings) {
+            // Open SettingsActivity if settings is clicked
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
             return true;
@@ -97,16 +103,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> newsItems) {
+        // Clear the previous adapter by creating a new adapter
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
-
         if (newsItems != null && !newsItems.isEmpty()) {
             mAdapter = new NewsAdapter(this, newsItems);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mEmptyTextView.setText(R.string.no_news);
         }
-
         View loadingProgress = findViewById(R.id.loading_progress);
+        // Remove loading progress bar after making http request and updating ui
         loadingProgress.setVisibility(View.GONE);
     }
 

@@ -2,7 +2,10 @@ package com.example.android.newsapp;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +13,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static com.example.android.newsapp.R.id.date;
-
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
+    private static final String LOG_TAG = NewsAdapter.class.getName();
     public List<News> mNewsList;
     private Context mContext;
     private static final String DATE_SEPORATOR = "T";
@@ -28,7 +30,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             super(itemView);
             titleTextView = (TextView) itemView.findViewById(R.id.title);
             sectionTextView = (TextView) itemView.findViewById(R.id.section);
-            dateTextView = (TextView) itemView.findViewById(date);
+            dateTextView = (TextView) itemView.findViewById(R.id.date);
         }
     }
 
@@ -53,10 +55,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(NewsAdapter.ViewHolder viewHolder, int position) {
-        News news = mNewsList.get(position);
+        final News news = mNewsList.get(position);
 
         TextView titleTextView = viewHolder.titleTextView;
         titleTextView.setText(news.getTitle());
+
+        titleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri newsUrl = Uri.parse(news.getUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, newsUrl);
+                mContext.startActivity(intent);
+            }
+        });
 
         TextView sectionTextView = viewHolder.sectionTextView;
         sectionTextView.setText(news.getSection());
@@ -67,7 +78,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         String time = dateParts[1];
         dateTextView.setText(date);
 
-        
+        Log.e(LOG_TAG, news.getUrl());
     }
 
     @Override

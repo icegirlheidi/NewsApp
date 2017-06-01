@@ -119,7 +119,8 @@ public final class QueryUtils {
                 String title = currentNews.getString("webTitle");
                 String sectionName = currentNews.getString("sectionName");
                 String date = currentNews.getString("webPublicationDate");
-                newsList.add(new News(title, sectionName, date));
+                String url = currentNews.getString("webUrl");
+                newsList.add(new News(title, sectionName, date, url));
             }
         } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);

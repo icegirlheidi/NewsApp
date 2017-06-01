@@ -114,4 +114,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<List<News>> loader) {
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
     }
+
 }

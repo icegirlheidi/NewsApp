@@ -6,19 +6,13 @@ public class News {
     private String mTitle;
     private String mSection;
     private String mDate;
+    private String mUrl;
 
-    //private String mUrl;
-
-    /*public News(String title, String date, String section, String url) {
+    public News(String title, String section, String date, String url) {
         mTitle = title;
-        mDate = date;
         mSection = section;
+        mDate = date;
         mUrl = url;
-    }*/
-    public News(String title, String section, String date) {
-        mTitle = title;
-        mSection = section;
-        mDate = date;
     }
 
 
@@ -34,7 +28,7 @@ public class News {
         return mDate;
     }
 
-    /*public String getUrl() {
+    public String getUrl() {
         return mUrl;
-    }*/
+    }
 }
